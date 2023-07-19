@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script>
+      const t = tf.tensor1d([1, 2, 3]);
+
+      // 비동기 API
+      //   t.data((d) => {
+      //     console.log(d);
+      //   });
+
+      const t1p = t.data();
+      console.log(t1p);
+    </script>
+  </head>
+  <body></body>
+</html>

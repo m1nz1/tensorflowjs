@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script>
+      const input = tf.input({ shape: [784] });
+      const densel = tf.layers
+        .dense({ units: 1, activation: "relu" })
+        .apply(input);
+      const dense2 = tf.layers
+      
+      const model = tf.model({ inputs: input, outputs: densel });
+      model.compile({
+        optimizer: tf.train.adam(),
+        loss: tf.losses.meanSquaredError,
+      });
+    </script>
+  </head>
+  <body></body>
+</html>
