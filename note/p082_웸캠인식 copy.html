@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+    <!-- <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script> -->
+  </head>
+  <body>
+    <div id="display"></div>
+    <div id="result"></div>
+    <script>
+      const video = document.createElement("video");
+      const display = document.getElementById("display");
+      const res = document.getElementById("result");
+      display.appendChild(video);
+
+      video.width = 500;
+      video.height = 500;
+
+      const main = async () => {
+        const net = await mobilenet.load();
+
+        const classifyWebcam = async () => {
+          const cam = await tf.data.webcam(video);
+          while (true) {
+            const img = await cam.capture();
+            const result = await net.classify(img);
+
+            img.print();
+            tf.dispose(img); // Dispose the image to free up memory
+            res.innerHTML =
+              result[0].className +
+              "<br>" +
+              (result[0].probability * 100).toFixed(2) +
+              "%";
+
+            await tf.nextFrame(); // Wait for the next animation frame
+          }
+        };
+
+        classifyWebcam();
+      };
+
+      // Automatically start classifying from the webcam when the page loads
+      window.onload = () => {
+        main();
+      };
+    </script>
+  </body>
+</html>
