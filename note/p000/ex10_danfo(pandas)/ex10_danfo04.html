@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script> -->
+  </head>
+  <body>
+    <script>
+      const json_data = [
+        { A: 0.4131, B: 4.1213, C: -1.54543, D: -1.121221 },
+        { A: 0.5131, B: -0.1213, C: -3.54543, D: 1.121221 },
+        { A: 0.6131, B: -0.3213, C: -1.54543, D: 2.121221 },
+        { A: 0.7131, B: -0.4213, C: 4.54543, D: 4.121221 },
+      ];
+      const df = new dfd.DataFrame(json_data);
+      df.print();
+    </script>
+  </body>
+</html>
