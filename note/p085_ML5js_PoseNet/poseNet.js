@@ -23,6 +23,7 @@ posenet.load().then((model) => {
       canvas.height = video.height;
       drawKeypoints(pose.keypoints, 0.6, context);
       drawSkeleton(pose.keypoints, 0.6, context);
+      console.log(pose.keypoints)
     });
     requestAnimationFrame(predict);
   }

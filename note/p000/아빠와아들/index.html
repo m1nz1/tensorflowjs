@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
     <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
     <style>
       #plot_div {
@@ -26,23 +25,37 @@
       const plot = document.getElementById("plot_div");
       const input = document.getElementById("up");
       const pre = document.getElementById("predict");
+
+      function createArraysFromDataFrame(df) {
+        const dfs = df.$dataIncolumnFormat;
+        const arrays = [];
+        const numArrays = 4;
+        for (let i = 0; i < numArrays; i++) {
+          arrays.push([]);
+        }
+
+        for (const columnData of dfs) {
+          const numElementsPerArray = Math.ceil(columnData.length / numArrays);
+          for (let i = 0; i < numArrays; i++) {
+            arrays[i].push(
+              ...columnData.slice(
+                i * numElementsPerArray,
+                (i + 1) * numElementsPerArray
+              )
+            );
+          }
+        }
+
+        return arrays;
+      }
+
       input.addEventListener("change", (ch) => {
-        // console.log(ch.target.files[0]);
-        dfd.readCSV(ch.target.files[0]).then((df) => {
+        console.log(ch);
+        dfd.readExcel(ch.target.files[0]).then((df) => {
           df.print();
           df.describe().print();
-          console.log(df.$dataIncolumnFormat);
-          const dfs = df.$dataIncolumnFormat;
-          const dfa = dfs.map((val, ind) => {
-            return val.map((v, i) => {
-              return { x: v, y: dfs[3][i] };
-            });
-          });
-
-          const series = ["TV", "Radio", "Newspaper", "Sales"];
-          const data = { values: [dfa[0], dfa[1], dfa[2]], series };
-          const surface = { name: "Scatterplot", tab: "Charts" };
-          tfvis.render.scatterplot(plot, data);
+          const arrays = createArraysFromDataFrame(df);
+          console.log(arrays);
         });
       });
     </script>
