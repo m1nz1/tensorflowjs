@@ -1,0 +1,46 @@
+<template>
+  <div>
+    <div id="display"></div>
+    <button @click="main">캠동작</button>
+    <div>{{ result }}</div>
+  </div>
+</template>
+<script>
+const videoElement = document.createElement('video')
+export default {
+  name: 'cam',
+  data() {
+    return {
+      result: '스샷을 찍어 이미지 분석을 시작하세요'
+    }
+  },
+  methods: {
+    main: async function () {
+      const tf = this.$tf
+      const mobilenet = this.$mobilenet
+      console.log(tf)
+      console.log(mobilenet)
+
+      this.result = '이미지분석중....'
+      const display = document.getElementById('display')
+      display.append(videoElement)
+      videoElement.width = 400
+      videoElement.height = 400
+
+      const cam = await tf.data.webcam(videoElement)
+      const net = await mobilenet.load()
+      const img = await cam.capture()
+      const result = await net.classify(img)
+      img.print()
+      tf.dispose(img)
+      this.result = `분석결과 (${result[0].className} ${(
+        result[0].probabilty * 100
+      ).toFixed(2)})`
+    }
+  },
+  mounted() {
+    this.main()
+  }
+}
+</script>
+<style></style>
