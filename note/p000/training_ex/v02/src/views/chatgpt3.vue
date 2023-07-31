@@ -12,15 +12,15 @@
     ></textarea>
     <br />
     <input
-      @keyup.enter="gpt()"
+      @keyup.enter="gpt3()"
       v-model="inData"
       placeholder="질문할 내용 입력하기"
     />
-    <button @click="gpt()">묻기</button>
+    <button @click="gpt3()">묻기</button>
   </div>
 </template>
 <script>
-import { kogptApi } from '../../public/kogpt.js'
+import { gpt3 } from '../../public/gpt3.js'
 export default {
   data() {
     return {
@@ -30,9 +30,7 @@ export default {
   },
   methods: {
     gpt: async function () {
-      const ask = this.inData
-      const answer = await kogptApi(ask, 32, 0.6, 0.7, 1)
-      this.resp = answer
+      this.resp = '타이핑중'
     }
   }
 }
