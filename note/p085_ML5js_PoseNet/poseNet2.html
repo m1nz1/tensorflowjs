@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page2: PoseNet을 이용한 모션측정및 결과출력</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2/dist/posenet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.11.0/dist/tf-converter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@0.0.6/dist/pose-detection.min.js"></script>
+  </head>
+  <style>
+    body {
+      height: 100%;
+      width: 100%;
+    }
+    video,
+    canvas {
+      position: absolute;
+    }
+    #cap_result {
+      position: absolute;
+      top: 70%;
+    }
+  </style>
+  <body>
+    <h1>Page2: PoseNet을 이용한 모션측정및 결과출력</h1>
+    <h2 id="result_label"></h2>
+    <div>
+      <video
+        src=""
+        id="video"
+        width="640"
+        height="480"
+        autoplay
+        muted
+        playsinline
+      ></video>
+      <canvas id="canvas"></canvas>
+      <h3 id="cap_result"></h3>
+    </div>
+    <script src="poseNet2.js"></script>
+  </body>
+</html>

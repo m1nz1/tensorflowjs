@@ -24,7 +24,7 @@ import { kogptApi } from '../../public/kogpt.js'
 export default {
   data() {
     return {
-      inData: '',
+      inData: '', 
       resp: '',
       init: `'정보:거주지 서울, 나이 30대, 성별 남자, 자녀 두 명, 전공 인공지능, 말투 친절함
 정보를 바탕으로 질문에 답하세요.
