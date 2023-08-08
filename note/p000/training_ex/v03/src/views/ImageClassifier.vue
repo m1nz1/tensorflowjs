@@ -14,7 +14,7 @@
 
 <script>
 import * as mobilenet from '@tensorflow-models/mobilenet'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data() {
@@ -53,35 +53,6 @@ export default {
           this.naverTranslate(topPrediction.className)
         })
       })
-    },
-    naverTranslate(text) {
-      const clientId = 'YOUR_NAVER_API_CLIENT_ID'
-      const clientSecret = 'YOUR_NAVER_API_CLIENT_SECRET'
-      const apiURL = 'https://openapi.naver.com/v1/papago/n2mt'
-
-      axios
-        .post(
-          apiURL,
-          {
-            source: 'en',
-            target: 'ko',
-            text: text
-          },
-          {
-            headers: {
-              'X-Naver-Client-Id': clientId,
-              'X-Naver-Client-Secret': clientSecret
-            }
-          }
-        )
-        .then((response) => {
-          const translatedText = response.data.message.result.translatedText
-          // TODO: 필요한 대로 번역된 텍스트를 사용하세요.
-          console.log(translatedText)
-        })
-        .catch((error) => {
-          console.error('번역에 실패했습니다.', error)
-        })
     }
   }
 }
