@@ -1,66 +1,19 @@
 <template>
-  <div class="black-bg" v-if="modal" @click="modal = false">
-    <div class="white-bg">
-      <h4>상세페이지</h4>
-      <div class="in-text">
-        <p>분류코드:{{ data[detail].id }}</p>
-        <p>타이틀:{{ data[detail].title }}</p>
-        <p>위치정보:{{ data[detail].imge }}</p>
-        <p>내용:{{ data[detail].content }}</p>
-        <p>비용:{{ data[detail].price }}</p>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div class="menu">
-      <a v-for="(v, i) in menubar" :key="i">{{ v }}</a>
-    </div>
-    <div id="container">
-      <div class="card" v-for="(e, j) in products" :key="j">
-        <div @click=";[(modal = true), (detail = ch(j))]">
-          <h3>{{ '여행지' + e }}</h3>
-          <img
-            :src="'/img0' + ((j % 6) + 1) + '.jpg'"
-            alt="안나옴"
-            class="imgs"
-          />
-          <h4>{{ data[j].title }}</h4>
-          <p>{{ data[j].price }}원</p>
-        </div>
-        <button @click="inc(j)">추천</button><span>추천수 : {{ pick[j] }}</span>
-      </div>
-    </div>
-  </div>
+  <nav>
+    <router-link to="/">Page1</router-link> |
+    <router-link to="/page2">Page2</router-link> |
+  </nav>
+  <router-view />
 </template>
+
 <script>
-import data from './assets/data.js'
-export default {
-  data() {
-    return {
-      detail: 0,
-      data,
-      modal: false,
-      pick: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      menubar: ['HOME', 'Location', 'Information', 'About'],
-      products: data.length
-    }
-  },
-  methods: {
-    inc(i) {
-      this.pick[i]++
-    },
-    ch(e) {
-      return e
-    }
-  }
-}
+// // import Page1 from './components/page1.vue'
+// export default {
+//   components: { page1 }
+// }
 </script>
+
 <style>
-body {
-  margin: 0;
-  padding: 0;
-}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -68,54 +21,17 @@ body {
   text-align: center;
   color: #2c3e50;
 }
-#container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+
+nav {
+  padding: 30px;
 }
-div {
-  box-sizing: border-box;
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
 }
-.black-bg {
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0, 0, 0, 0.5);
-  position: fixed;
-  padding: 20px;
-}
-.white-bg {
-  position: relative;
-  margin: auto;
-  width: 460px;
-  height: 400px;
-  top: 20%;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-.card:hover {
-  background-color: rgb(214, 226, 243);
-}
-.card {
-  width: 30%;
-  min-width: 320px;
-  margin: 10px;
-  padding: 5px;
-  border: 1px solid gray;
-  border-radius: 15px;
-}
-.imgs {
-  width: 85%;
-  border-radius: 10px;
-}
-.menu {
-  background-color: darkblue;
-  padding: 15px;
-  border-radius: 5px;
-}
-.menu a {
-  color: wheat;
-  padding: 10px;
-  text-decoration-line: none;
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
