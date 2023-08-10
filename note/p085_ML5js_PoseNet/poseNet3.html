@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page2: PoseNet을 이용한 모션측정및 결과출력</title>
+    <title>PoseNet을 이용한 모션측정및 결과출력</title>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2/dist/posenet.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.11.0/dist/tf-converter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@0.0.6/dist/pose-detection.min.js"></script>
     <style>
-      /* 스타일 */
       body {
         height: 100%;
         width: 100%;
@@ -24,8 +24,8 @@
     </style>
   </head>
   <body>
-    <!-- 웹 카메라 비디오와 캔버스 -->
-    <h1>Page2: PoseNet을 이용한 모션측정및 결과출력</h1>
+    <h1>PoseNet을 이용한 모션측정및 결과출력</h1>
+    <h2 id="result_label"></h2>
     <div>
       <video
         src=""
@@ -40,30 +40,28 @@
       <h3 id="cap_result"></h3>
     </div>
     <script>
-      /* 자바스크립트 코드 */
       const video = document.getElementById("video");
       const canvas = document.getElementById("canvas");
       const cap_result = document.getElementById("cap_result");
       const context = canvas.getContext("2d");
+      const result_label = document.getElementById("result_label");
       let lastCaptureTime = 0;
 
-      // 웹 카메라 스트림 가져오기
       navigator.mediaDevices
         .getUserMedia({
           video: true,
-          audio: false,
         })
         .then(function (stream) {
           video.srcObject = stream;
         });
 
-      // PoseNet 모델 로드
       posenet.load().then((model) => {
+        console.log(model);
         video.onloadeddata = (e) => {
+          console.log("정상");
           predict();
         };
 
-        // 웹 카메라 비디오 프레임에서 포즈 추정하고 결과를 캔버스에 그리는 함수
         function predict() {
           model.estimateSinglePose(video).then((pose) => {
             canvas.width = video.width;
@@ -71,7 +69,6 @@
             drawKeypoints(pose.keypoints, 0.6, context);
             drawSkeleton(pose.keypoints, 0.6, context);
 
-            // 손 위치에 따라 캡처 여부를 표시하는 로직
             const currentTime = new Date().getTime();
             if (currentTime - lastCaptureTime >= 1000) {
               lastCaptureTime = currentTime;
@@ -83,22 +80,22 @@
                 (keypoint) => keypoint.part === "leftWrist"
               );
 
-              if (rightHand && rightHand.position.y < video.height / 2) {
-                cap_result.innerHTML = "오른손을 드셨습니다.";
-              } else if (leftHand && leftHand.position.y < video.height / 2) {
-                cap_result.innerHTML = "왼손을 드셨습니다.";
-              } else {
-                cap_result.innerHTML = "손을 들지 않은 상태입니다.";
+              cap_result.innerHTML = ""; // 초기화
+
+              if (leftHand && leftHand.score > 0.5) {
+                cap_result.innerHTML = "왼손을 들었습니다!";
+              }
+              if (rightHand && rightHand.score > 0.5) {
+                cap_result.innerHTML = "오른손을 들었습니다!";
               }
             }
           });
-
-          requestAnimationFrame(predict); // 다음 프레임 예측을 위해 애니메이션 프레임 요청
+          requestAnimationFrame(predict);
         }
       });
 
-      // 그리기를 위한 함수들
       const color = "blue";
+      const boundingBoxColor = "red";
       const lineWidth = 2;
 
       function toTuple({ y, x }) {

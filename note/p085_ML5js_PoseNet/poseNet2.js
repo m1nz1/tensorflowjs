@@ -38,15 +38,13 @@ posenet.load().then((model) => {
           (keypoint) => keypoint.part === "leftWrist"
         );
 
-        if (leftHand && rightHand.score > 0.5) {
+        cap_result.innerHTML = ""; // 초기화
+
+        if (leftHand && leftHand.score > 0.5) {
           cap_result.innerHTML = "왼손을 들었습니다!";
-        } else {
-          cap_result.innerHTML = "";
         }
         if (rightHand && rightHand.score > 0.5) {
           cap_result.innerHTML = "오른손을 들었습니다!";
-        } else {
-          cap_result.innerHTML = "";
         }
       }
     });
