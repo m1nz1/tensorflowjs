@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <style>
+    .head {
+      font-size: 1.6rem;
+      padding: 20px;
+      background-color: rgb(125, 168, 169);
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 2px;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    ul > li {
+      font-size: 1.2rem;
+      padding: 20px;
+      border-bottom: 1px solid #e6e6e6;
+      cursor: pointer;
+    }
+    .add-btn {
+      padding: 25px;
+      font-size: 30px;
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      background-color: rgb(138, 158, 198);
+      color: #fff;
+      margin: 10px;
+      border: none;
+      border-radius: 50%;
+    }
+    textarea {
+      width: 100%;
+      height: 330px;
+      font-size: 2.5rem;
+      padding: 10px;
+      box-sizing: border-box;
+      resize: none;
+    }
+    .save-btn,
+    .x-btn,
+    .del-btn,
+    .edit-btn {
+      color: #fff;
+      width: 50%;
+      height: 50%;
+      font-size: 1.3em;
+    }
+    .save-btn {
+      background-color: dodgerblue;
+    }
+    .x-btn {
+      color: rgb(194, 50, 71);
+    }
+    .del-btn {
+      background-color: coral;
+    }
+    .edit-btn {
+      margin-top: 5px;
+      width: 100%;
+      text-align: center;
+      background-color: rgb(51, 51, 237);
+    }
+  </style>
+  <body>
+    <div id="app">
+      <div class="head">my memo</div>
+      <div id="content">
+        <div id="list" v-if="mode==='list'">
+          <ul>
+            <li v-for="memo in memos" :key="memo.id" @click="open(memo.id)">
+              {{ memo.content }}
+            </li>
+          </ul>
+          <button class="add-btn" @click="mode='write', inData=''">+</button>
+        </div>
+        <!-- <div class="write" v-if="mode!=='list'"> -->
+        <div class="write" v-else>
+          <textarea v-model="inData" autofocus></textarea>
+          <div>
+            <button class="save-btn" @click="save" v-if="mode==='write'">
+              저장
+            </button>
+            <button class="del-btn" @click="del" v-if="mode==='edit'">
+              삭제
+            </button>
+            <button class="x-btn" @click="mode='list'">취소</button>
+          </div>
+          <div class="edit-btn" @click="edit" v-if="mode==='edit'">수정</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const { createApp, ref, reactive } = Vue;
+      createApp({
+        data() {
+          return {};
+        },
+        setup() {
+          const inData = ref("비었음");
+          const mode = ref("list");
+          let memo = reactive({});
+          const memos = reactive(
+            JSON.parse(localStorage.getItem("memos")) ?? []
+          );
+          const save = () => {
+            memos.push({
+              id: memos.length + 1,
+              content: inData.value,
+              date: new Date(),
+            });
+            mode.value = "list"; // 중요
+            localStorage.setItem("memos", JSON.stringify(memos));
+          };
+          const open = (m) => {
+            for (const v of memos) {
+              if (m === v.id) {
+                memo = v;
+              }
+            }
+            inData.value = memo.content; //내용을 표현
+            mode.value = "edit";
+          };
+          const edit = () => {
+            for (const v of memos) {
+              if (memo.id === v.id) {
+                v.content = inData.value;
+                v.date = new Date();
+              }
+            }
+            localStorage.setItem("memos", JSON.stringify(memos));
+            mode.value = "list";
+          };
+          const del = () => {
+            memos.forEach((v, i) => {
+              if (memo.id === v.id) {
+                memos.splice(i, 1);
+              }
+            });
+            localStorage.setItem("memos", JSON.stringify(memos));
+            mode.value = "list";
+          };
+          return { mode, inData, memos, save, open, edit, del };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
